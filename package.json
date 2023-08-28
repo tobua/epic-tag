@@ -19,11 +19,11 @@
     "@types/jsdom": "^21.1.2",
     "@types/react": "^18.2.21",
     "@types/react-dom": "^18.2.7",
-    "happy-dom": "^10.11.0",
+    "happy-dom": "^10.11.1",
     "padua": "^2.0.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "vitest": "0.34.2"
+    "vitest": "0.34.3"
   },
   "peerDependencies": {
     "@types/react": ">= 18",
@@ -63,7 +63,7 @@
     "extends": "./node_modules/padua/configuration/eslint.cjs"
   },
   "publishConfig": {
-    "provenance": false
+    "provenance": true
   },
   "engines": {
     "node": ">= 16"
