@@ -1,3 +1,3 @@
 import { create } from 'logua'
 
-export const log = create('epic-tag', 'blue')
+export const log = create('epic-tag', 'green')

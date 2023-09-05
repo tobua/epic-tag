@@ -3,7 +3,7 @@
   "description": "Advanced styled components for React.",
   "version": "0.0.0-development",
   "repository": "github:tobua/epic-tag",
-  "license": "MIT",
+  "license": "CC-BY-NC-4.0",
   "author": "Matthias Giger",
   "scripts": {
     "build": "padua build",
@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "epic-inline": "^0.8.0",
+    "epic-jsx": "^0.4.0",
     "logua": "^2.3.0"
   },
   "devDependencies": {
@@ -19,7 +20,7 @@
     "@types/jsdom": "^21.1.2",
     "@types/react": "^18.2.21",
     "@types/react-dom": "^18.2.7",
-    "happy-dom": "^10.11.1",
+    "happy-dom": "^10.11.2",
     "padua": "^2.0.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -60,7 +61,10 @@
   ],
   "prettier": "padua/configuration/.prettierrc.json",
   "eslintConfig": {
-    "extends": "./node_modules/padua/configuration/eslint.cjs"
+    "extends": "./node_modules/padua/configuration/eslint.cjs",
+    "rules": {
+      "react/no-this-in-sfc": 0
+    }
   },
   "publishConfig": {
     "provenance": true

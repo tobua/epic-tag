@@ -1,5 +1,9 @@
-import { ei } from 'epic-inline'
+import { ei, configure } from 'epic-inline'
 import { Styles } from './types'
+
+configure({
+  size: (value) => (typeof value === 'number' ? `${value}px` : value),
+})
 
 export const mergeStyles = (styles: object[]) =>
   styles.reduce((result, current) => ({ ...result, ...current }), {})

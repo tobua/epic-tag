@@ -1,0 +1,12 @@
+{
+  "papua": {
+    "icon": "../logo.svg",
+    "title": "epic-tag Demo"
+  },
+  "dependencies": {
+    "papua": "latest"
+  },
+  "localDependencies": {
+    "epic-tag": ".."
+  }
+}
