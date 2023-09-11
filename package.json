@@ -12,7 +12,6 @@
   },
   "dependencies": {
     "epic-inline": "^0.8.0",
-    "epic-jsx": "^0.4.0",
     "logua": "^2.3.0"
   },
   "devDependencies": {
@@ -20,11 +19,12 @@
     "@types/jsdom": "^21.1.2",
     "@types/react": "^18.2.21",
     "@types/react-dom": "^18.2.7",
-    "happy-dom": "^10.11.2",
+    "epic-jsx": "^0.5.0",
+    "happy-dom": "^11.0.2",
     "padua": "^2.0.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "vitest": "0.34.3"
+    "vitest": "0.34.4"
   },
   "peerDependencies": {
     "@types/react": ">= 18",

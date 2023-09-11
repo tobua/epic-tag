@@ -21,6 +21,18 @@ export const tag = (Tag: HTMLTag, styles?: Styles, states?: States) => {
       }
     }
 
+    if (typeof states === 'object' && states.focus) {
+      props.onFocus = () => {
+        Object.assign(ref.style, toInline(states.focus))
+      }
+
+      props.onBlur = () => {
+        // TODO other state styles should be kept.
+        ref.removeAttribute('style')
+        Object.assign(ref.style, toInline(styles))
+      }
+    }
+
     this.after(() => {
       ;[ref] = this.refs
     })

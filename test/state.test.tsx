@@ -35,3 +35,23 @@ test('Hover state styles are applied on hover.', async () => {
 
   expect(button.style.cssText).toBe('color: blue;')
 })
+
+test('Focus state styles are applied on focus on removed on blur.', async () => {
+  const Button = tag('button', 'color-blue', { hover: 'color-red', focus: 'color-green' })
+
+  const { tree } = render(<Button>my-button</Button>)
+
+  const button = tree.children[0].children[0].getElement() as HTMLParagraphElement
+
+  expect(button.tagName.toLowerCase()).toBe('button')
+
+  expect(button.style.cssText).toBe('color: blue;')
+
+  button.focus()
+
+  expect(button.style.cssText).toBe('color: green;')
+
+  button.blur()
+
+  expect(button.style.cssText).toBe('color: blue;')
+})

@@ -4,6 +4,7 @@
     "title": "epic-tag Demo"
   },
   "dependencies": {
+    "epic-jsx": "^0.5.0",
     "papua": "latest"
   },
   "localDependencies": {

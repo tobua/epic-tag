@@ -2,8 +2,8 @@ import { render } from 'epic-jsx'
 import { tag } from 'epic-tag'
 import logo from './logo.svg'
 
-const MyButton = tag('button', 'color-blue', { hover: 'color-red' })
-const MyInput = tag('input', 'background-blue', { hover: 'background-red' })
+const MyButton = tag('button', 'color-blue', { hover: 'color-red', focus: 'color-green' })
+const MyInput = tag('input', 'bg-blue', { hover: 'bg-red', focus: 'bg-green' })
 
 render(
   <div style={{ fontFamily: 'sans-serif', display: 'flex', gap: '10px', flexDirection: 'column' }}>
