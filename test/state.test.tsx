@@ -55,3 +55,19 @@ test('Focus state styles are applied on focus on removed on blur.', async () => 
 
   expect(button.style.cssText).toBe('color: blue;')
 })
+
+test('Any element can be made focusable.', async () => {
+  const Div = tag('div', 'color-blue', { focus: 'color-green' })
+
+  const { tree } = render(<Div focusable>my-div</Div>)
+
+  const div = tree.children[0].children[0].getElement() as HTMLDivElement
+
+  expect(div.tagName.toLowerCase()).toBe('div')
+  expect(div.style.cssText).toBe('color: blue;')
+  expect(div.getAttribute('tabIndex')).toBe('0')
+
+  div.focus()
+
+  expect(div.style.cssText).toBe('color: green;')
+})

@@ -2,8 +2,7 @@
 
 import { test, expect, vi } from 'vitest'
 import { render } from 'epic-jsx/test'
-// eslint-disable-next-line import/order
-import * as React from 'epic-jsx'
+import React from 'epic-jsx'
 import { tag } from '../index'
 
 test('Renders a tag with the proper styles.', async () => {
@@ -17,7 +16,7 @@ test('Renders a tag with the proper styles.', async () => {
   const paragraph = tree.children[0].children[0].getElement() as HTMLParagraphElement
 
   expect(paragraph.style.cssText).toBe(
-    'display: flex; justify-content: center; align-items: center;'
+    'display: flex; justify-content: center; align-items: center;',
   )
 })
 
@@ -29,7 +28,7 @@ test('Multiple tags can be rendered.', async () => {
     <>
       <Button>button</Button>
       <Input>text</Input>
-    </>
+    </>,
   )
 
   expect(tree.tag).toBe('body')
@@ -38,7 +37,7 @@ test('Multiple tags can be rendered.', async () => {
 
   const button = tree.children[0].children[0].children[0].getElement() as HTMLInputElement
 
-  expect(button.style.cssText).toBe('font-family: sans; padding: 5px;')
+  expect(button.style.cssText).toBe('font-family: sans-serif; padding: 5px;')
 })
 
 test('Warning if no tag specified.', async () => {
@@ -59,4 +58,20 @@ test('Styles are optional.', async () => {
   const Div = tag('div')
 
   expect(Div).toBeDefined()
+})
+
+test('"focusable" property will add tabindex attribute.', async () => {
+  const Image = tag('img', 'width-[10vw] height-[10vw]')
+
+  const { tree } = render(
+    <>
+      <Image>regular image</Image>
+      <Image focusable>focusable image</Image>
+    </>,
+  )
+
+  const regularImage = tree.children[0].children[0].children[0].getElement() as HTMLInputElement
+  const focusableImage = tree.children[0].children[1].children[0].getElement() as HTMLInputElement
+  expect(regularImage.getAttribute('tabindex')).toBe(null)
+  expect(focusableImage.getAttribute('tabindex')).toBe('0')
 })

@@ -1,10 +1,10 @@
 import React, { ComponentProps } from 'react'
 import { toInline } from './style'
-import { HTMLTag, Styles, States } from './types'
-import { log } from './helper'
+import { Tag as TagType, Styles, States } from './types'
+import { log, validTag } from './helper'
 
-export const tag = (Tag: HTMLTag, styles?: Styles, states?: States) => {
-  if (!Tag || typeof Tag !== 'string') log('Missing variable Tag', 'warning') // No return for type inference.
+export const tag = (Tag: TagType, styles?: Styles, states?: States) => {
+  if (!validTag(Tag)) log('Missing variable Tag', 'warning') // No return for type inference.
 
   return function StyleTag({ hover, ...props }: States & ComponentProps<any>) {
     let ref: HTMLElement
@@ -31,6 +31,10 @@ export const tag = (Tag: HTMLTag, styles?: Styles, states?: States) => {
         ref.removeAttribute('style')
         Object.assign(ref.style, toInline(styles))
       }
+    }
+
+    if (props.focusable && typeof props.tabIndex === 'undefined') {
+      props.tabIndex = '0'
     }
 
     this.after(() => {
