@@ -1,13 +1,25 @@
 import React, { ComponentProps } from 'react'
 import { toInline } from './style'
 import { Tag as TagType, Styles, States } from './types'
-import { log, validTag } from './helper'
+import { extendStates, extendStyles, log, validTag } from './helper'
 
 export const tag = (Tag: TagType, styles?: Styles, states?: States) => {
   if (!validTag(Tag)) log('Missing variable Tag', 'warning') // No return for type inference.
 
-  return function StyleTag({ hover, ...props }: States & ComponentProps<any>) {
+  // Merge inputs when existing component is extended.
+  if (typeof Tag === 'function') {
+    const { configuration } = Tag
+    // eslint-disable-next-line no-param-reassign
+    Tag = configuration.tag
+    // eslint-disable-next-line no-param-reassign
+    styles = extendStyles(configuration.styles, styles)
+    // eslint-disable-next-line no-param-reassign
+    states = extendStates(configuration.states, states)
+  }
+
+  function StyleTag({ hover, ...props }: States & ComponentProps<any>) {
     let ref: HTMLElement
+    // TODO useRef as value to keep track of styles.
 
     if (typeof states === 'object' && states.hover) {
       props.onMouseEnter = () => {
@@ -43,4 +55,9 @@ export const tag = (Tag: TagType, styles?: Styles, states?: States) => {
 
     return <Tag style={toInline(styles)} {...props} />
   }
+
+  // Pass inputs on for later extension of this component.
+  StyleTag.configuration = { styles, states, tag: Tag }
+
+  return StyleTag
 }

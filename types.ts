@@ -5,4 +5,6 @@ export type Styles = string | object | (string | object)[]
 export type States = { hover?: Styles; focus?: Styles }
 export type Tag =
   | HTMLTag
-  | (({ hover, ...props }: States & ComponentProps<any>) => React.JSX.Element)
+  | ((({ hover, ...props }: States & ComponentProps<any>) => React.JSX.Element) & {
+      configuration: { styles?: Styles; states?: States; tag: HTMLTag }
+    })

@@ -60,6 +60,29 @@ test('Styles are optional.', async () => {
   expect(Div).toBeDefined()
 })
 
+test('Existing tags can be extended.', async () => {
+  const Button = tag('button', 'flex color-blue')
+  const RedButton = tag(Button, 'color-red')
+
+  const { tree } = render(
+    <>
+      <Button>blue button</Button>
+      <RedButton>red button</RedButton>
+    </>,
+  )
+
+  expect(tree.tag).toBe('body')
+
+  expect(tree.children[0].children[0].children[0].tag).toBe('button')
+  expect(tree.children[0].children[1].children[0].tag).toBe('button')
+
+  const blueButton = tree.children[0].children[0].children[0].getElement() as HTMLInputElement
+  const redButton = tree.children[0].children[1].children[0].getElement() as HTMLInputElement
+
+  expect(blueButton.style.cssText).toBe('display: flex; color: blue;')
+  expect(redButton.style.cssText).toBe('display: flex; color: red;')
+})
+
 test('"focusable" property will add tabindex attribute.', async () => {
   const Image = tag('img', 'width-[10vw] height-[10vw]')
 
