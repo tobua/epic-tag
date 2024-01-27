@@ -13,5 +13,5 @@ render(
     <h1>epic-tag Demo</h1>
     <MyButton>Hover Me!</MyButton>
     <MyInput value="123" />
-  </Wrapper>
+  </Wrapper>,
 )
