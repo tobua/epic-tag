@@ -4,10 +4,13 @@
     "title": "epic-tag Demo"
   },
   "dependencies": {
-    "epic-jsx": "^0.6.3",
-    "papua": "latest"
+    "epic-jsx": "^0.7.1",
+    "papua": "^6.0.2"
   },
   "localDependencies": {
     "epic-tag": ".."
-  }
+  },
+  "trustedDependencies": [
+    "papua"
+  ]
 }

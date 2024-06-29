@@ -1,6 +1,5 @@
-// @vitest-environment happy-dom
-
-import { test, expect } from 'vitest'
+import './setup-dom'
+import { test, expect } from 'bun:test'
 import { render } from 'epic-jsx/test'
 // eslint-disable-next-line import/order
 import * as React from 'epic-jsx'
