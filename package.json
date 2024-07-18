@@ -6,41 +6,27 @@
   "license": "CC-BY-NC-4.0",
   "author": "Matthias Giger",
   "scripts": {
-    "build": "padua build",
-    "start": "padua watch",
-    "test": "vitest run --dir test"
+    "check": "biome check --write .",
+    "types": "tsc"
   },
   "dependencies": {
     "epic-inline": "^0.9.1",
     "logua": "^3.0.3"
   },
-  "padua": {
-    "tsconfig": {
-      "compilerOptions": {
-        "paths": {
-          "react": [
-            "./node_modules/epic-jsx/dist/index.js"
-          ],
-          "react/jsx-dev-runtime": [
-            "./node_modules/epic-jsx/dist/index.js"
-          ]
-        }
-      }
-    }
-  },
   "devDependencies": {
+    "@biomejs/biome": "^1.8.3",
     "@happy-dom/global-registrator": "^14.12.3",
     "@testing-library/react": "^16.0.0",
     "@types/bun": "^1.1.6",
     "@types/jsdom": "^21.1.7",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
-    "epic-jsx": "^0.7.1",
+    "epic-jsx": "^0.7.2",
     "happy-dom": "^14.12.3",
-    "padua": "^4.0.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "vitest": "^1.6.0"
+    "typescript": "^5.5.3",
+    "zero-configuration": "^0.16.3"
   },
   "peerDependencies": {
     "@types/react": ">= 18",
@@ -55,20 +41,17 @@
     }
   },
   "trustedDependencies": [
-    "padua"
+    "zero-configuration"
   ],
   "type": "module",
   "sideEffects": false,
-  "main": "./dist/index.js",
+  "main": "./index.tsx",
   "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "default": "./dist/index.js"
-    }
+    ".": "./index.tsx"
   },
-  "types": "./dist/index.d.ts",
   "files": [
-    "dist"
+    "*.ts",
+    "*.tsx"
   ],
   "keywords": [
     "styled",
@@ -78,17 +61,52 @@
     "css",
     "inline"
   ],
-  "prettier": "padua/configuration/.prettierrc.json",
-  "eslintConfig": {
-    "extends": "./node_modules/padua/configuration/eslint.cjs",
-    "rules": {
-      "react/no-this-in-sfc": 0
-    }
-  },
   "publishConfig": {
     "provenance": true
   },
-  "engines": {
-    "node": ">= 18"
+  "configuration": {
+    "gitignore": "bundle",
+    "vscode": "biome",
+    "biome": {
+      "extends": "recommended",
+      "linter": {
+        "rules": {
+          "suspicious": {
+            "noExplicitAny": "off"
+          }
+        }
+      },
+      "files": {
+        "ignore": [
+          "demo"
+        ]
+      }
+    },
+    "typescript": [
+      {
+        "extends": "plugin",
+        "compilerOptions": {
+          "jsx": "react-jsx"
+        },
+        "files": [
+          "index.tsx"
+        ]
+      },
+      {
+        "extends": "plugin",
+        "folder": "test",
+        "compilerOptions": {
+          "jsx": "react-jsx",
+          "paths": {
+            "react": [
+              "./../node_modules/epic-jsx"
+            ],
+            "react/jsx-dev-runtime": [
+              "./../node_modules/epic-jsx"
+            ]
+          }
+        }
+      }
+    ]
   }
 }

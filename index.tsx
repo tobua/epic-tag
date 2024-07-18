@@ -1,19 +1,21 @@
-import React, { ComponentProps } from 'react'
-import { toInline } from './style'
-import { Tag as TagType, Styles, States } from './types'
+import type { ComponentProps } from 'react'
 import { extendStates, extendStyles, log, validTag } from './helper'
+import { toInline } from './style'
+import type { States, Styles, Tag as TagType } from './types'
 
 export const tag = (Tag: TagType, styles?: Styles, states?: States) => {
-  if (!validTag(Tag)) log('Missing variable Tag', 'warning') // No return for type inference.
+  if (!validTag(Tag)) {
+    log('Missing variable Tag', 'warning') // No return for type inference.
+  }
 
   // Merge inputs when existing component is extended.
   if (typeof Tag === 'function') {
     const { configuration } = Tag
-    // eslint-disable-next-line no-param-reassign
+    // biome-ignore lint/style/noParameterAssign: Seems easier
     Tag = configuration.tag
-    // eslint-disable-next-line no-param-reassign
+    // biome-ignore lint/style/noParameterAssign: Seems easier
     styles = extendStyles(configuration.styles, styles)
-    // eslint-disable-next-line no-param-reassign
+    // biome-ignore lint/style/noParameterAssign: Seems easier
     states = extendStates(configuration.states, states)
   }
 
@@ -49,7 +51,9 @@ export const tag = (Tag: TagType, styles?: Styles, states?: States) => {
       props.tabIndex = '0'
     }
 
+    // @ts-ignore TODO
     this.after(() => {
+      // @ts-ignore TODO
       ;[ref] = this.refs
     })
 

@@ -1,10 +1,10 @@
-import type { ComponentProps } from 'react'
+import type { ComponentProps, JSX } from 'react'
 
-export type HTMLTag = keyof JSX.IntrinsicElements
+export type HtmlTag = keyof JSX.IntrinsicElements
 export type Styles = string | object | (string | object)[]
 export type States = { hover?: Styles; focus?: Styles }
 export type Tag =
-  | HTMLTag
-  | ((({ hover, ...props }: States & ComponentProps<any>) => React.JSX.Element) & {
-      configuration: { styles?: Styles; states?: States; tag: HTMLTag }
+  | HtmlTag
+  | ((({ hover, ...props }: States & ComponentProps<any>) => JSX.Element) & {
+      configuration: { styles?: Styles; states?: States; tag: HtmlTag }
     })

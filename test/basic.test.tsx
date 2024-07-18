@@ -1,10 +1,9 @@
 import './setup-dom'
-import { test, expect, spyOn } from 'bun:test'
+import { expect, spyOn, test } from 'bun:test'
 import { render } from 'epic-jsx/test'
-import React from 'epic-jsx'
 import { tag } from '../index'
 
-test('Renders a tag with the proper styles.', async () => {
+test('Renders a tag with the proper styles.', () => {
   const Paragraph = tag('p', 'flex center')
 
   const { tree } = render(<Paragraph>my-paragraph</Paragraph>)
@@ -14,12 +13,10 @@ test('Renders a tag with the proper styles.', async () => {
 
   const paragraph = tree.children[0].children[0].getElement() as HTMLParagraphElement
 
-  expect(paragraph.style.cssText).toBe(
-    'display: flex; justify-content: center; align-items: center;',
-  )
+  expect(paragraph.style.cssText).toBe('display: flex; justify-content: center; align-items: center;')
 })
 
-test('Multiple tags can be rendered.', async () => {
+test('Multiple tags can be rendered.', () => {
   const Input = tag('input', 'radius padding')
   const Button = tag('button', 'font p-small')
 
@@ -39,7 +36,7 @@ test('Multiple tags can be rendered.', async () => {
   expect(button.style.cssText).toBe('font-family: sans-serif; padding: 5px;')
 })
 
-test('Warning if no tag specified.', async () => {
+test('Warning if no tag specified.', () => {
   const warnings = spyOn(console, 'warn')
 
   expect(warnings.mock.calls.length).toBe(0)
@@ -53,13 +50,13 @@ test('Warning if no tag specified.', async () => {
   warnings.mockRestore()
 })
 
-test('Styles are optional.', async () => {
+test('Styles are optional.', () => {
   const Div = tag('div')
 
   expect(Div).toBeDefined()
 })
 
-test('Existing tags can be extended.', async () => {
+test('Existing tags can be extended.', () => {
   const Button = tag('button', 'flex color-blue')
   const RedButton = tag(Button, 'color-red')
 
@@ -85,13 +82,13 @@ test('Existing tags can be extended.', async () => {
   expect(redButton.style.cssText).toBe('display: flex; color: red;')
 })
 
-test('"focusable" property will add tabindex attribute.', async () => {
+test('"focusable" property will add tabindex attribute.', () => {
   const Image = tag('img', 'width-[10vw] height-[10vw]')
 
   const { tree } = render(
     <>
       <Image>regular image</Image>
-      <Image focusable>focusable image</Image>
+      <Image focusable={true}>focusable image</Image>
     </>,
   )
 

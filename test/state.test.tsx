@@ -1,8 +1,6 @@
 import './setup-dom'
-import { test, expect } from 'bun:test'
+import { expect, test } from 'bun:test'
 import { render } from 'epic-jsx/test'
-// eslint-disable-next-line import/order
-import * as React from 'epic-jsx'
 import { tag } from '../index'
 
 const triggerMouseEvent = (type: 'enter' | 'leave', element: HTMLElement) => {
@@ -15,7 +13,7 @@ const triggerMouseEvent = (type: 'enter' | 'leave', element: HTMLElement) => {
   element.dispatchEvent(event)
 }
 
-test('Hover state styles are applied on hover.', async () => {
+test('Hover state styles are applied on hover.', () => {
   const Button = tag('button', 'color-blue', { hover: 'color-red' })
 
   const { tree } = render(<Button>my-button</Button>)
@@ -35,7 +33,7 @@ test('Hover state styles are applied on hover.', async () => {
   expect(button.style.cssText).toBe('color: blue;')
 })
 
-test('Focus state styles are applied on focus on removed on blur.', async () => {
+test('Focus state styles are applied on focus on removed on blur.', () => {
   const Button = tag('button', 'color-blue', { hover: 'color-red', focus: 'color-green' })
 
   const { tree } = render(<Button>my-button</Button>)
@@ -55,10 +53,10 @@ test('Focus state styles are applied on focus on removed on blur.', async () => 
   expect(button.style.cssText).toBe('color: blue;')
 })
 
-test('Any element can be made focusable.', async () => {
+test('Any element can be made focusable.', () => {
   const Div = tag('div', 'color-blue', { focus: 'color-green' })
 
-  const { tree } = render(<Div focusable>my-div</Div>)
+  const { tree } = render(<Div focusable={true}>my-div</Div>)
 
   const div = tree.children[0].children[0].getElement() as HTMLDivElement
 
