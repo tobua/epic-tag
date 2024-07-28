@@ -13,14 +13,12 @@ export const rsbuild = defineConfig({
     favicon: '../logo.png',
   },
   output: {
-    assetPrefix: '/',
+    assetPrefix: '/epic-tag/',
   },
   tools: {
     rspack: {
       resolve: {
         alias: {
-          react: 'epic-jsx',
-          'react-dom': 'epic-jsx',
           'react/jsx-runtime': 'epic-jsx',
           'react/jsx-dev-runtime': 'epic-jsx',
         },

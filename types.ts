@@ -8,3 +8,6 @@ export type Tag =
   | ((({ hover, ...props }: States & ComponentProps<any>) => JSX.Element) & {
       configuration: { styles?: Styles; states?: States; tag: HtmlTag }
     })
+
+// biome-ignore lint/style/useNamingConvention: React default, same as epic-jsx.
+export type CSSProperties = { [key in keyof CSSStyleDeclaration]?: CSSStyleDeclaration[key] extends string ? string | number : never }

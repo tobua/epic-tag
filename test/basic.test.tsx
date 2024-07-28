@@ -16,6 +16,14 @@ test('Renders a tag with the proper styles.', () => {
   expect(paragraph.style.cssText).toBe('display: flex; justify-content: center; align-items: center;')
 })
 
+test('Pixel values are added for size styles.', () => {
+  const Paragraph = tag('p', 'flex w-small p-12 flexGrow-1')
+  const { tree } = render(<Paragraph>my-paragraph</Paragraph>)
+  expect((tree.children[0].children[0].getElement() as HTMLParagraphElement).style.cssText).toBe(
+    'display: flex; width: 5px; padding: 12px; flex-grow: 1;',
+  )
+})
+
 test('Multiple tags can be rendered.', () => {
   const Input = tag('input', 'radius padding')
   const Button = tag('button', 'font p-small')

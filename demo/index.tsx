@@ -1,10 +1,11 @@
+/// <reference types="@rsbuild/core/types" />
 import { render } from 'epic-jsx'
 import { tag } from 'epic-tag'
 import logo from '../logo.svg'
 
 const Wrapper = tag('div', 'font flex gap-10 column')
-const MyButton = tag('button', 'color-blue', { hover: 'color-red', focus: 'color-green' })
-const MyInput = tag('input', 'bg-blue', { hover: 'bg-red', focus: 'bg-green' })
+const MyButton = tag('button', 'color-blue p-sm button cursor', { hover: 'color-red', focus: 'color-green' })
+const MyInput = tag('input', 'bg-blue p-sm outline border', { hover: 'bg-red', focus: 'bg-green' })
 const Image = tag('img', 'alignSelf-center width-[10vw] height-[10vw]')
 
 render(

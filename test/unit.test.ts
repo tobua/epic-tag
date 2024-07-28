@@ -16,4 +16,8 @@ test('Various style types are converted properly.', () => {
     display: 'flex',
     flexDirection: 'column',
   })
+  expect(toInline(['flex', 'missing', { flexDirection: 'column' }, 'ignored'])).toEqual({
+    display: 'flex',
+    flexDirection: 'column',
+  })
 })
