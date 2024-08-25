@@ -3,6 +3,8 @@ import { extendStates, extendStyles, log, validTag } from './helper'
 import { toInline } from './style'
 import type { States, Styles, Tag as TagType } from './types'
 
+export const refs: Record<string, HTMLElement> = {}
+
 export const tag = (Tag: TagType, styles?: Styles, states?: States) => {
   if (!validTag(Tag)) {
     log('Missing variable Tag', 'warning') // No return for type inference.
@@ -55,6 +57,14 @@ export const tag = (Tag: TagType, styles?: Styles, states?: States) => {
     this.after(() => {
       // @ts-ignore TODO
       ;[ref] = this.refs
+
+      if (props.id) {
+        if (!Object.hasOwn(refs, props.id)) {
+          refs[props.id] = ref
+        } else if (process.env.NODE_ENV !== 'production') {
+          log(`A ref with id ${props.id} has already been assigned, make sure to use unique ids.`, 'warning')
+        }
+      }
     })
 
     return <Tag style={toInline(styles)} {...props} />

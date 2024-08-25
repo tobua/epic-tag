@@ -21,7 +21,6 @@ test('Hover state styles are applied on hover.', () => {
   const button = tree.children[0].children[0].getElement() as HTMLParagraphElement
 
   expect(button.tagName.toLowerCase()).toBe('button')
-
   expect(button.style.cssText).toBe('color: blue;')
 
   triggerMouseEvent('enter', button)
@@ -41,7 +40,6 @@ test('Focus state styles are applied on focus on removed on blur.', () => {
   const button = tree.children[0].children[0].getElement() as HTMLParagraphElement
 
   expect(button.tagName.toLowerCase()).toBe('button')
-
   expect(button.style.cssText).toBe('color: blue;')
 
   button.focus()
@@ -67,4 +65,18 @@ test('Any element can be made focusable.', () => {
   div.focus()
 
   expect(div.style.cssText).toBe('color: green;')
+})
+
+test('Can merge multiple definitions from array styles.', () => {
+  const Button = tag('button', ['color-blue', 'flex', { backgroundColor: 'yellow' }], {
+    focus: ['color-green', { backgroundColor: 'brown' }, 'display-none w-small'],
+  })
+  const button = render(<Button>button</Button>).tree.children[0].children[0].getElement() as HTMLParagraphElement
+
+  expect(button.tagName.toLowerCase()).toBe('button')
+  expect(button.style.cssText).toBe('color: blue; display: flex; background-color: yellow;')
+
+  button.focus()
+
+  expect(button.style.cssText).toBe('color: green; display: none; background-color: brown; width: 5px;')
 })

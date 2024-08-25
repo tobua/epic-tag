@@ -1,7 +1,7 @@
 import './setup-dom'
 import { expect, spyOn, test } from 'bun:test'
 import { render } from 'epic-jsx/test'
-import { tag } from '../index'
+import { refs, tag } from '../index'
 
 test('Renders a tag with the proper styles.', () => {
   const Paragraph = tag('p', 'flex center')
@@ -104,4 +104,38 @@ test('"focusable" property will add tabindex attribute.', () => {
   const focusableImage = tree.children[1].children[0].getElement() as HTMLInputElement
   expect(regularImage.getAttribute('tabindex')).toBe(null)
   expect(focusableImage.getAttribute('tabindex')).toBe('0')
+})
+
+test('Can take an array of styles.', () => {
+  const Paragraph = tag('p', ['flex bg-red', 'color-blue'])
+  const { tree } = render(<Paragraph>merge</Paragraph>)
+  expect((tree.children[0].children[0].getElement() as HTMLParagraphElement).style.cssText).toBe(
+    'display: flex; background: red; color: blue;',
+  )
+})
+
+test('Can take an array of styles with regular object styles.', () => {
+  const Paragraph = tag('p', ['flex bg-red', { color: 'green' }, { transform: 'skewY(35deg)', boxShadow: '1px 2px' }])
+  const { tree } = render(<Paragraph>merge</Paragraph>)
+  expect((tree.children[0].children[0].getElement() as HTMLParagraphElement).style.cssText).toBe(
+    'display: flex; background: red; color: green; transform: skewY(35deg); box-shadow: 1px 2px;',
+  )
+})
+
+test('When an id is used as a prop on a tag the element ref will be accessible.', () => {
+  const Button = tag('button', 'color-blue')
+  const Div = tag('div', 'color-red')
+
+  const { tree } = render(
+    <>
+      <Button id="button">button</Button>
+      <Div id="div">div</Div>
+    </>,
+  )
+
+  const button = tree.children[0].children[0].getElement() as HTMLInputElement
+  const div = tree.children[1].children[0].getElement() as HTMLInputElement
+
+  expect(refs.button.style.cssText).toEqual(button.style.cssText)
+  expect(refs.div.style.cssText).toEqual(div.style.cssText)
 })
