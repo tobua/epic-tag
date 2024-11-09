@@ -2,7 +2,7 @@ import type { ComponentProps, JSX } from 'react'
 
 export type HtmlTag = keyof JSX.IntrinsicElements
 export type Style = string | CSSProperties
-export type Styles = Style | Style[] | (Properties | number | string)[]
+export type Styles = Style | Style[] | (CSSProperties | number | string)[]
 export type States = { hover?: Styles; focus?: Styles }
 export type Tag =
   | HtmlTag
