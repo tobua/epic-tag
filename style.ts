@@ -1,7 +1,7 @@
 import { ei } from 'epic-inline'
 import type { CSSProperties, Styles } from './types'
 
-export const mergeStyles = (styles: object[]) => styles.reduce((result, current) => Object.assign(result, current), {})
+export const mergeStyles = (styles: CSSProperties[]) => styles.reduce((result, current) => Object.assign(result, current), {})
 
 // TODO manually maintained, same as epic-jsx.
 const sizeStyleProperties = [
@@ -38,7 +38,7 @@ function convertStylesToPixels(styleObject: CSSStyleDeclaration) {
   return convertedStyles
 }
 
-export const toInline = (styles?: Styles) => {
+export const toInline = (styles?: string | number | Styles | Styles[]) => {
   if (!styles) {
     return undefined
   }

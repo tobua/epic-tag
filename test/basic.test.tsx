@@ -24,6 +24,15 @@ test('Pixel values are added for size styles.', () => {
   )
 })
 
+test('Various combinations are merged.', () => {
+  const Link = tag('a', 'flex column link normal gap-medium')
+
+  const { tree } = render(<Link>my-link</Link>)
+  expect((tree.children[0].children[0].getElement() as HTMLParagraphElement).style.cssText).toBe(
+    'display: flex; flex-direction: column; text-decoration: none; color: inherit; margin: 0px; gap: 10px;',
+  )
+})
+
 test('Multiple tags can be rendered.', () => {
   const Input = tag('input', 'radius padding')
   const Button = tag('button', 'font p-small')
