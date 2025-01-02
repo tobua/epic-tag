@@ -1,0 +1,47 @@
+import './setup-dom'
+import { expect, test } from 'bun:test'
+import { render } from 'epic-jsx/test'
+import { tag } from '../index'
+
+test('Array based values are merged properly.', () => {
+  const Button = tag('button', ['color-blue', 'flex', 'display-block', 'color-red'])
+
+  const { tree } = render(<Button>my-button</Button>)
+
+  const button = tree.children[0].children[0].getElement() as HTMLParagraphElement
+
+  expect(button.tagName.toLowerCase()).toBe('button')
+  expect(button.style.cssText).toBe('color: red; display: block;')
+})
+
+test('Props are applied as styles when truthy.', () => {
+  const Button = tag('button', 'color-blue', { selected: 'color-green' })
+
+  // True
+  let root = render(<Button selected={true}>my-button</Button>)
+  let button = root.tree.children[0].children[0].getElement() as HTMLParagraphElement
+
+  expect(button.tagName.toLowerCase()).toBe('button')
+  expect(button.style.cssText).toBe('color: green;')
+
+  // Truthy
+  root = render(<Button selected={1}>my-button</Button>)
+  button = root.tree.children[0].children[0].getElement() as HTMLParagraphElement
+
+  expect(button.tagName.toLowerCase()).toBe('button')
+  expect(button.style.cssText).toBe('color: green;')
+
+  // False
+  root = render(<Button selected={false}>my-button</Button>)
+  button = root.tree.children[0].children[0].getElement() as HTMLParagraphElement
+
+  expect(button.tagName.toLowerCase()).toBe('button')
+  expect(button.style.cssText).toBe('color: blue;')
+
+  // Missing
+  root = render(<Button>my-button</Button>)
+  button = root.tree.children[0].children[0].getElement() as HTMLParagraphElement
+
+  expect(button.tagName.toLowerCase()).toBe('button')
+  expect(button.style.cssText).toBe('color: blue;')
+})

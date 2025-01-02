@@ -21,8 +21,14 @@ export const tag = (Tag: TagType, styles?: Styles, states?: States) => {
     states = extendStates(configuration.states, states)
   }
 
+  if (styles && !Array.isArray(styles)) {
+    // biome-ignore lint/style/noParameterAssign: Seems easier
+    styles = [styles]
+  }
+
   function StyleTag({ hover, ...props }: States & ComponentProps<any>) {
     let ref: HTMLElement
+    const currentStyles: Styles = styles ? (Array.isArray(styles) ? [...styles] : styles) : []
     // TODO useRef as value to keep track of styles.
 
     if (typeof states === 'object' && states.hover) {
@@ -33,7 +39,7 @@ export const tag = (Tag: TagType, styles?: Styles, states?: States) => {
       props.onMouseLeave = () => {
         // Remove all styles and reset to initial styles (could be memoized).
         ref.removeAttribute('style')
-        Object.assign(ref.style, toInline(styles))
+        Object.assign(ref.style, toInline(currentStyles))
       }
     }
 
@@ -45,7 +51,16 @@ export const tag = (Tag: TagType, styles?: Styles, states?: States) => {
       props.onBlur = () => {
         // TODO other state styles should be kept.
         ref.removeAttribute('style')
-        Object.assign(ref.style, toInline(styles))
+        Object.assign(ref.style, toInline(currentStyles))
+      }
+    }
+
+    if (typeof states === 'object') {
+      for (const state of Object.keys(states)) {
+        if (Array.isArray(currentStyles) && Object.hasOwn(props, state) && props[state]) {
+          // @ts-ignore
+          currentStyles.push(states[state])
+        }
       }
     }
 
@@ -67,7 +82,7 @@ export const tag = (Tag: TagType, styles?: Styles, states?: States) => {
       }
     })
 
-    return <Tag style={toInline(styles)} {...props} />
+    return <Tag {...props} style={Object.assign(toInline(currentStyles) ?? {}, props.style)} />
   }
 
   // Pass inputs on for later extension of this component.

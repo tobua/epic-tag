@@ -148,3 +148,16 @@ test('When an id is used as a prop on a tag the element ref will be accessible.'
   expect(refs.button.style.cssText).toEqual(button.style.cssText)
   expect(refs.div.style.cssText).toEqual(div.style.cssText)
 })
+
+test('style attribute will not override existing styles, but be merged.', () => {
+  const Paragraph = tag('p', 'flex center')
+
+  const { tree } = render(<Paragraph style={{ color: 'red', display: 'block' }}>my-paragraph</Paragraph>)
+
+  expect(tree.tag).toBe('body')
+  expect(tree.children[0].children[0].tag).toBe('p')
+
+  const paragraph = tree.children[0].children[0].getElement() as HTMLParagraphElement
+
+  expect(paragraph.style.cssText).toBe('display: block; justify-content: center; align-items: center; color: red;')
+})
