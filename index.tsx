@@ -1,7 +1,7 @@
 import type { ComponentProps } from 'react'
 import { extendStates, extendStyles, log, validTag } from './helper'
 import { toInline } from './style'
-import type { States, Styles, Tag as TagType } from './types'
+import type { States, Style, Styles, Tag as TagType } from './types'
 
 export const refs: Record<string, HTMLElement> = {}
 
@@ -28,7 +28,7 @@ export const tag = (Tag: TagType, styles?: Styles, states?: States) => {
 
   function StyleTag({ hover, ...props }: States & ComponentProps<any>) {
     let ref: HTMLElement
-    const currentStyles: Styles = styles ? (Array.isArray(styles) ? [...styles] : styles) : []
+    const currentStyles = (styles ? (Array.isArray(styles) ? [...styles] : styles) : []) as Style[]
     // TODO useRef as value to keep track of styles.
 
     if (typeof states === 'object' && states.hover) {
@@ -66,6 +66,12 @@ export const tag = (Tag: TagType, styles?: Styles, states?: States) => {
 
     if (props.focusable && typeof props.tabIndex === 'undefined') {
       props.tabIndex = '0'
+    }
+
+    // Resolve string styles.
+    if (props.style && typeof props.style === 'string') {
+      currentStyles.push(props.style)
+      props.style = undefined
     }
 
     // @ts-ignore TODO

@@ -45,3 +45,25 @@ test('Props are applied as styles when truthy.', () => {
   expect(button.tagName.toLowerCase()).toBe('button')
   expect(button.style.cssText).toBe('color: blue;')
 })
+
+test('String styles can be passed as props.', () => {
+  const Button = tag('button', 'color-blue')
+
+  let root = render(<Button style="flex">my-button</Button>)
+  let button = root.tree.children[0].children[0].getElement() as HTMLParagraphElement
+
+  expect(button.tagName.toLowerCase()).toBe('button')
+  expect(button.style.cssText).toBe('color: blue; display: flex;')
+
+  root = render(<Button style="flex color-red">my-button</Button>)
+  button = root.tree.children[0].children[0].getElement() as HTMLParagraphElement
+
+  expect(button.tagName.toLowerCase()).toBe('button')
+  expect(button.style.cssText).toBe('color: red; display: flex;')
+
+  root = render(<Button style={{ display: 'flex', color: 'red' }}>my-button</Button>)
+  button = root.tree.children[0].children[0].getElement() as HTMLParagraphElement
+
+  expect(button.tagName.toLowerCase()).toBe('button')
+  expect(button.style.cssText).toBe('color: red; display: flex;')
+})
