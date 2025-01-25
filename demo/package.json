@@ -5,13 +5,13 @@
     "types": "tsc"
   },
   "dependencies": {
-    "@biomejs/biome": "^1.8.3",
-    "@rsbuild/core": "^1.0.1-beta.16",
-    "@rsbuild/plugin-react": "^1.0.1-beta.16",
-    "epic-jsx": "^0.9.3",
+    "@biomejs/biome": "^1.9.4",
+    "@rsbuild/core": "^1.2.2",
+    "@rsbuild/plugin-react": "^1.1.0",
+    "epic-jsx": "^0.9.7",
     "exmpl": "^3.1.0",
-    "typescript": "^5.5.4",
-    "zero-configuration": "^0.17.3"
+    "typescript": "^5.7.3",
+    "zero-configuration": "^0.18.0"
   },
   "localDependencies": {
     "epic-tag": ".."

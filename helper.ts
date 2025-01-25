@@ -1,4 +1,6 @@
 import { create } from 'logua'
+import type React from 'react'
+import { toInline } from './style'
 import type { States, Styles, Tag } from './types'
 
 export const log = create('epic-tag', 'green')
@@ -14,12 +16,18 @@ export function validTag(tag: Tag) {
   return true
 }
 
-// TODO also handle object values.
-export function extendStyles(initial?: Styles, additional?: Styles) {
+export function extendStyles(initial?: Styles | { [key: string]: Styles }, additional?: Styles | { [key: string]: Styles }) {
   if (!additional) {
     return initial
   }
   if (!initial) {
+    return additional
+  }
+  // Styles also use this an can be arrays.
+  if (typeof initial === 'object' && !Array.isArray(initial)) {
+    if (typeof additional === 'object') {
+      return Object.assign(initial, additional)
+    }
     return additional
   }
   return `${initial} ${additional}`
@@ -44,4 +52,28 @@ export function extendStates(initial?: States, additional?: States) {
   }
 
   return newStates
+}
+
+export function handleStateIn(ref: { current: HTMLElement }, state: Styles | { [key: string]: Styles }, props: React.ComponentProps<any>) {
+  let hover = state as Styles
+  if (typeof state === 'object') {
+    let found = false
+    for (const key of Object.keys(state)) {
+      if (key in props) {
+        // @ts-ignore
+        hover = state[key]
+        found = true
+        break // Use the first matching prop value for hover
+      }
+    }
+    // @ts-ignore
+    if (!found && state.default) {
+      // @ts-ignore
+      hover = state.default
+    }
+  }
+
+  return () => {
+    Object.assign(ref.current.style, toInline(hover))
+  }
 }

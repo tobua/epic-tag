@@ -7,26 +7,24 @@
   "author": "Matthias Giger",
   "scripts": {
     "check": "biome check --write .",
-    "types": "tsc"
+    "types": "tsc && tsc --project ./test/tsconfig.json"
   },
   "dependencies": {
-    "epic-inline": "^0.12.2",
+    "epic-inline": "^0.12.4",
     "logua": "^3.0.3"
   },
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",
-    "@happy-dom/global-registrator": "^16.6.0",
+    "@happy-dom/global-registrator": "^16.7.2",
     "@testing-library/react": "^16.2.0",
-    "@types/bun": "^1.1.17",
+    "@types/bun": "^1.2.0",
     "@types/jsdom": "^21.1.7",
-    "@types/react": "^19.0.7",
-    "@types/react-dom": "^19.0.3",
-    "epic-jsx": "^0.9.5",
-    "happy-dom": "^16.6.0",
+    "epic-jsx": "^0.9.7",
+    "happy-dom": "^16.7.2",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "typescript": "^5.7.3",
-    "zero-configuration": "^0.17.6"
+    "zero-configuration": "^0.18.0"
   },
   "peerDependencies": {
     "@types/react": ">= 18",
@@ -86,7 +84,18 @@
       {
         "extends": "plugin",
         "compilerOptions": {
-          "jsx": "react-jsx"
+          "jsx": "react-jsx",
+          "paths": {
+            "react": [
+              "./node_modules/epic-jsx"
+            ],
+            "react/jsx-runtime": [
+              "./node_modules/epic-jsx"
+            ],
+            "react/jsx-dev-runtime": [
+              "./node_modules/epic-jsx"
+            ]
+          }
         },
         "files": [
           "index.tsx"
@@ -101,6 +110,9 @@
           "paths": {
             "react": [
               "./../node_modules/epic-jsx"
+            ],
+            "react/jsx-runtime": [
+              "./node_modules/epic-jsx"
             ],
             "react/jsx-dev-runtime": [
               "./../node_modules/epic-jsx"

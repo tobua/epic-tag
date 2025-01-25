@@ -1,16 +1,17 @@
-import type { ComponentProps, JSX } from 'react'
+import type React from 'react'
 
-export type HtmlTag = keyof JSX.IntrinsicElements
+export type HtmlTag = keyof React.JSX.IntrinsicElements
 export type Style = string | CSSProperties
 export type Styles = Style | Style[] | (CSSProperties | string)[]
 export type States = {
-  hover?: Styles
-  focus?: Styles
-  [key: string]: Styles | undefined
+  hover?: Styles | { [key: string]: Styles }
+  focus?: Styles | { [key: string]: Styles }
+  // Due to TS structural typing hover and focus is also required here...
+  [key: string]: Styles | { [key: string]: Styles } | undefined
 }
 export type Tag =
   | HtmlTag
-  | ((({ hover, ...props }: States & ComponentProps<any>) => JSX.Element) & {
+  | ((({ hover, ...props }: States & React.ComponentProps<any>) => React.JSX.Element) & {
       configuration: { styles?: Styles; states?: States; tag: HtmlTag }
     })
 

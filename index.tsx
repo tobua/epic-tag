@@ -1,5 +1,5 @@
-import type { ComponentProps } from 'react'
-import { extendStates, extendStyles, log, validTag } from './helper'
+import type React from 'react'
+import { extendStates, extendStyles, handleStateIn, log, validTag } from './helper'
 import { toInline } from './style'
 import type { States, Style, Styles, Tag as TagType } from './types'
 
@@ -16,7 +16,7 @@ export const tag = (Tag: TagType, styles?: Styles, states?: States) => {
     // biome-ignore lint/style/noParameterAssign: Seems easier
     Tag = configuration.tag
     // biome-ignore lint/style/noParameterAssign: Seems easier
-    styles = extendStyles(configuration.styles, styles)
+    styles = extendStyles(configuration.styles, styles) as Styles
     // biome-ignore lint/style/noParameterAssign: Seems easier
     states = extendStates(configuration.states, states)
   }
@@ -26,32 +26,28 @@ export const tag = (Tag: TagType, styles?: Styles, states?: States) => {
     styles = [styles]
   }
 
-  function StyleTag({ hover, ...props }: States & ComponentProps<any>) {
-    let ref: HTMLElement
+  function StyleTag({ hover, ...props }: States & React.ComponentProps<any>) {
+    const ref = { current: undefined } as unknown as { current: HTMLElement }
     const currentStyles = (styles ? (Array.isArray(styles) ? [...styles] : styles) : []) as Style[]
     // TODO useRef as value to keep track of styles.
 
     if (typeof states === 'object' && states.hover) {
-      props.onMouseEnter = () => {
-        Object.assign(ref.style, toInline(states.hover))
-      }
+      props.onMouseEnter = handleStateIn(ref, states.hover, props)
 
       props.onMouseLeave = () => {
         // Remove all styles and reset to initial styles (could be memoized).
-        ref.removeAttribute('style')
-        Object.assign(ref.style, toInline(currentStyles))
+        ref.current.removeAttribute('style')
+        Object.assign(ref.current.style, toInline(currentStyles))
       }
     }
 
     if (typeof states === 'object' && states.focus) {
-      props.onFocus = () => {
-        Object.assign(ref.style, toInline(states.focus))
-      }
+      props.onFocus = handleStateIn(ref, states.focus, props)
 
       props.onBlur = () => {
         // TODO other state styles should be kept.
-        ref.removeAttribute('style')
-        Object.assign(ref.style, toInline(currentStyles))
+        ref.current.removeAttribute('style')
+        Object.assign(ref.current.style, toInline(currentStyles))
       }
     }
 
@@ -77,11 +73,11 @@ export const tag = (Tag: TagType, styles?: Styles, states?: States) => {
     // @ts-ignore TODO
     this.after(() => {
       // @ts-ignore TODO
-      ;[ref] = this.refs
+      ref.current = this.refs[0]
 
       if (props.id) {
         if (!Object.hasOwn(refs, props.id)) {
-          refs[props.id] = ref
+          refs[props.id] = ref.current
         } else if (process.env.NODE_ENV !== 'production') {
           log(`A ref with id ${props.id} has already been assigned, make sure to use unique ids.`, 'warning')
         }

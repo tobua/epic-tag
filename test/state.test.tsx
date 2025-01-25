@@ -32,6 +32,34 @@ test('Hover state styles are applied on hover.', () => {
   expect(button.style.cssText).toBe('color: blue;')
 })
 
+test('Props based hover styles can be used.', () => {
+  const Button = tag('button', 'color-blue', { light: 'color-green', hover: { default: 'color-red', light: 'color-yellow' } })
+
+  let rendered = render(<Button light={true}>my-button</Button>)
+
+  let button = rendered.tree.children[0].children[0].getElement() as HTMLParagraphElement
+
+  expect(button.tagName.toLowerCase()).toBe('button')
+  expect(button.style.cssText).toBe('color: green;')
+
+  triggerMouseEvent('enter', button)
+
+  expect(button.style.cssText).toBe('color: yellow;')
+
+  triggerMouseEvent('leave', button)
+
+  expect(button.style.cssText).toBe('color: green;')
+
+  // Use default key.
+  rendered = render(<Button>my-button</Button>)
+
+  button = rendered.tree.children[0].children[0].getElement() as HTMLParagraphElement
+
+  triggerMouseEvent('enter', button)
+
+  expect(button.style.cssText).toBe('color: red;')
+})
+
 test('Focus state styles are applied on focus on removed on blur.', () => {
   const Button = tag('button', 'color-blue', { hover: 'color-red', focus: 'color-green' })
 
