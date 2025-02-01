@@ -1,11 +1,11 @@
 import { create } from 'logua'
 import type React from 'react'
 import { toInline } from './style'
-import type { States, Styles, Tag } from './types'
+import type { HtmlTag, States, Styles, Tag } from './types'
 
 export const log = create('epic-tag', 'green')
 
-export function validTag(tag: Tag) {
+export function validTag<T extends HtmlTag, P extends string>(tag: T | Tag<T, P>) {
   if (!tag) {
     return false
   }
@@ -33,7 +33,7 @@ export function extendStyles(initial?: Styles | { [key: string]: Styles }, addit
   return `${initial} ${additional}`
 }
 
-export function extendStates(initial?: States, additional?: States) {
+export function extendStates<P extends string>(initial?: States<P>, additional?: States<P>) {
   if (!additional) {
     return initial
   }
@@ -41,7 +41,7 @@ export function extendStates(initial?: States, additional?: States) {
     return additional
   }
 
-  const newStates: States = {}
+  const newStates = {} as States<P>
 
   if (initial.hover || additional.hover) {
     newStates.hover = extendStyles(initial.hover, additional.hover)

@@ -161,3 +161,20 @@ test('style attribute will not override existing styles, but be merged.', () => 
 
   expect(paragraph.style.cssText).toBe('display: block; justify-content: center; align-items: center; color: red;')
 })
+
+test('Tag types are inferred dynamically.', () => {
+  const Link = tag('a', 'flex column link normal gap-medium')
+  const Button = tag('button', 'flex button', { some: 'flex ' }) // TODO only works when States added.
+  const States = tag('div', 'flex', { active: 'inline' })
+
+  render(
+    <>
+      <Link href="https://google.com">Link</Link>
+      {/* @ts-expect-error */}
+      <Button href="https://google.com">Button</Button>
+      <States active={true}>Active</States>
+      {/* @ts-expect-error */}
+      <States missing={false}>Missing</States>
+    </>,
+  )
+})
