@@ -1,7 +1,8 @@
 import { ei } from 'epic-inline'
-import type { CSSProperties, Styles } from './types'
+import type React from 'epic-jsx'
+import type { Styles } from './types'
 
-export const mergeStyles = (styles: CSSProperties[]) => styles.reduce((result, current) => Object.assign(result, current), {})
+export const mergeStyles = (styles: React.CSSProperties[]) => styles.reduce((result, current) => Object.assign(result, current), {})
 
 // TODO manually maintained, same as epic-jsx.
 const sizeStyleProperties = [
@@ -24,14 +25,14 @@ function startsWithSizeProperty(propertyName: string) {
 }
 
 function convertStylesToPixels(styleObject: CSSStyleDeclaration) {
-  const convertedStyles: CSSProperties = {}
+  const convertedStyles: React.CSSProperties = {}
   for (const key in styleObject) {
     if (Object.hasOwn(styleObject, key)) {
       const value = styleObject[key]
       if (typeof value === 'number' && startsWithSizeProperty(key)) {
-        convertedStyles[key] = `${value}px`
+        convertedStyles[key as keyof React.CSSProperties] = `${value}px`
       } else {
-        convertedStyles[key] = value
+        convertedStyles[key as keyof React.CSSProperties] = value as any
       }
     }
   }

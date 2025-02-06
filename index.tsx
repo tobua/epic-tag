@@ -1,3 +1,4 @@
+import type { Component } from 'epic-jsx'
 import { extendStates, extendStyles, handleStateIn, log, validTag } from './helper'
 import { toInline } from './style'
 import type { HtmlTag, States, Style, Styles, TagProps, Tag as TagType } from './types'
@@ -6,7 +7,7 @@ export type { Styles, TagType as Tag }
 
 export const refs: Record<string, HTMLElement> = {}
 
-export const tag = <T extends HtmlTag, P extends string>(Tag: T | TagType<T, P>, styles?: Styles, states?: States<P>) => {
+export const tag = <T extends HtmlTag, P extends string>(Tag: T | TagType<T, P>, styles?: Styles, states?: States<P>): TagType<T, P> => {
   if (!validTag(Tag)) {
     log('Missing variable Tag', 'warning') // No return for type inference.
   }
@@ -14,20 +15,18 @@ export const tag = <T extends HtmlTag, P extends string>(Tag: T | TagType<T, P>,
   // Merge inputs when existing component is extended.
   if (typeof Tag === 'function') {
     const { configuration } = Tag
-    // biome-ignore lint/style/noParameterAssign: Seems easier
     Tag = configuration.tag
-    // biome-ignore lint/style/noParameterAssign: Seems easier
     styles = extendStyles(configuration.styles, styles) as Styles
-    // biome-ignore lint/style/noParameterAssign: Seems easier
     states = extendStates(configuration.states, states)
   }
 
   if (styles && !Array.isArray(styles)) {
-    // biome-ignore lint/style/noParameterAssign: Seems easier
     styles = [styles]
   }
 
-  function StyleTag(props: TagProps<T, P>) {
+  const TagComponent = Tag as TagType<T, P>
+
+  function StyleTag(this: Component, props: TagProps<T, P>) {
     const ref = { current: undefined } as unknown as { current: HTMLElement }
     const currentStyles = (styles ? (Array.isArray(styles) ? [...styles] : styles) : []) as Style[]
     // TODO useRef as value to keep track of styles.
@@ -71,10 +70,8 @@ export const tag = <T extends HtmlTag, P extends string>(Tag: T | TagType<T, P>,
       props.style = undefined
     }
 
-    // @ts-ignore TODO
     this.after(() => {
-      // @ts-ignore TODO
-      ref.current = this.refs[0]
+      ref.current = this.refs[0] as HTMLElement
 
       if (props.id) {
         if (!Object.hasOwn(refs, props.id)) {
@@ -85,12 +82,13 @@ export const tag = <T extends HtmlTag, P extends string>(Tag: T | TagType<T, P>,
       }
     })
 
-    // @ts-ignore too complex for inference...
-    return <Tag {...props} style={Object.assign(toInline(currentStyles) ?? {}, props.style)} />
+    const objectStyles = Object.assign(toInline(currentStyles) ?? {}, props.style)
+
+    return <TagComponent {...props} style={objectStyles} />
   }
 
   // Pass inputs on for later extension of this component.
-  StyleTag.configuration = { styles, states, tag: Tag }
+  StyleTag.configuration = { styles, states, tag: Tag as TagType<T, P> }
 
   return StyleTag
 }

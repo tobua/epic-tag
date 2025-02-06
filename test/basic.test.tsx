@@ -1,5 +1,7 @@
 import './setup-dom'
 import { expect, spyOn, test } from 'bun:test'
+// biome-ignore lint/correctness/noUnusedImports: Used for types in editor
+import React from 'epic-jsx'
 import { render } from 'epic-jsx/test'
 import { refs, tag } from '../index'
 

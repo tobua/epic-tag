@@ -10,17 +10,17 @@
     "types": "tsc && tsc --project ./test/tsconfig.json"
   },
   "dependencies": {
-    "epic-inline": "^0.12.4",
+    "epic-inline": "^0.12.6",
     "logua": "^3.0.3"
   },
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",
-    "@happy-dom/global-registrator": "^16.8.1",
+    "@happy-dom/global-registrator": "^17.0.0",
     "@testing-library/react": "^16.2.0",
     "@types/bun": "^1.2.2",
     "@types/jsdom": "^21.1.7",
-    "epic-jsx": "^0.9.13",
-    "happy-dom": "^16.8.1",
+    "epic-jsx": "^0.9.16",
+    "happy-dom": "^17.0.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "typescript": "^5.7.3",
@@ -71,6 +71,9 @@
         "rules": {
           "suspicious": {
             "noExplicitAny": "off"
+          },
+          "style": {
+            "noParameterAssign": "off"
           }
         }
       },
