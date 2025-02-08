@@ -6,7 +6,8 @@ export type Styles = Style | Style[] // TODO does this have an effect???? | (CSS
 export type States<T extends string> = {
   hover?: Styles | { [key: string]: Styles }
   focus?: Styles | { [key: string]: Styles }
-} & { [K in T]: Styles | { [key: string]: Styles } | undefined }
+  press?: Styles | { [key: string]: Styles }
+} & { [K in T]?: Styles | { [key: string]: Styles } | undefined }
 
 export type Props<T extends string> = { focusable?: boolean } & { [K in T]?: unknown extends boolean ? never : unknown }
 export type TagProps<T extends HtmlTag, S extends string> = Props<S> & React.ComponentProps<T> & { style?: Style }

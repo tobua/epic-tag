@@ -1,5 +1,5 @@
 import type { Component } from 'epic-jsx'
-import { extendStates, extendStyles, handleStateIn, log, validTag } from './helper'
+import { extendStates, extendStyles, handleStateIn, handleStateOut, log, validTag } from './helper'
 import { toInline } from './style'
 import type { HtmlTag, States, Style, Styles, TagProps, Tag as TagType } from './types'
 
@@ -33,20 +33,18 @@ export const tag = <T extends HtmlTag, P extends string>(Tag: T | TagType<T, P>,
 
     if (typeof states === 'object' && states.hover) {
       props.onMouseEnter = handleStateIn(ref, states.hover, props)
-      props.onMouseLeave = () => {
-        // Remove all styles and reset to initial styles (could be memoized).
-        ref.current.removeAttribute('style')
-        Object.assign(ref.current.style, toInline(currentStyles))
-      }
+      props.onMouseLeave = handleStateOut(ref, currentStyles)
     }
 
-    if (typeof props === 'object' && typeof states === 'object' && states.focus) {
+    if (typeof states === 'object' && states.focus) {
+      // TODO also consider, onFocusIn, onFocus out folder children coming in and out of focus.
       props.onFocus = handleStateIn(ref, states.focus, props)
-      props.onBlur = () => {
-        // TODO other state styles should be kept.
-        ref.current.removeAttribute('style')
-        Object.assign(ref.current.style, toInline(currentStyles))
-      }
+      props.onBlur = handleStateOut(ref, currentStyles)
+    }
+
+    if (typeof states === 'object' && states.press) {
+      props.onMouseDown = handleStateIn(ref, states.press, props)
+      props.onMouseUp = handleStateOut(ref, currentStyles)
     }
 
     if (typeof states === 'object') {
@@ -70,7 +68,7 @@ export const tag = <T extends HtmlTag, P extends string>(Tag: T | TagType<T, P>,
       props.style = undefined
     }
 
-    this.after(() => {
+    this.once(() => {
       ref.current = this.refs[0] as HTMLElement
 
       if (props.id) {

@@ -1,7 +1,7 @@
 import { create } from 'logua'
 import type React from 'react'
 import { toInline } from './style'
-import type { HtmlTag, States, Styles, Tag } from './types'
+import type { HtmlTag, States, Style, Styles, Tag } from './types'
 
 export const log = create('epic-tag', 'green')
 
@@ -42,38 +42,54 @@ export function extendStates<P extends string>(initial?: States<P>, additional?:
   }
 
   const newStates = {} as States<P>
+  const stateKeys = ['hover', 'focus', 'press'] as const
 
-  if (initial.hover || additional.hover) {
-    newStates.hover = extendStyles(initial.hover, additional.hover)
-  }
-
-  if (initial.focus || additional.focus) {
-    newStates.focus = extendStyles(initial.focus, additional.focus)
+  for (const key of stateKeys) {
+    if (initial[key] || additional[key]) {
+      newStates[key] = extendStyles(initial[key], additional[key])
+    }
   }
 
   return newStates
 }
 
 export function handleStateIn(ref: { current: HTMLElement }, state: Styles | { [key: string]: Styles }, props: React.ComponentProps<any>) {
-  let hover = state as Styles
+  let specificState = state as Styles
   if (typeof state === 'object') {
     let found = false
     for (const key of Object.keys(state)) {
       if (key in props) {
         // @ts-ignore
-        hover = state[key]
+        specificState = state[key]
         found = true
-        break // Use the first matching prop value for hover
+        break // Use the first matching prop value for state
       }
     }
     // @ts-ignore
     if (!found && state.default) {
       // @ts-ignore
-      hover = state.default
+      specificState = state.default
     }
   }
 
   return () => {
-    Object.assign(ref.current.style, toInline(hover))
+    if (!ref.current) {
+      return toInline(specificState)
+    }
+
+    Object.assign(ref.current.style, toInline(specificState))
+  }
+}
+
+export function handleStateOut(ref: { current: HTMLElement }, currentStyles: Style[]) {
+  return () => {
+    if (!ref.current) {
+      return toInline()
+    }
+
+    // TODO styles from other state styles should be kept.
+    // Remove all styles and reset to initial styles (could be memoized).
+    ref.current.removeAttribute('style')
+    Object.assign(ref.current.style, toInline(currentStyles))
   }
 }

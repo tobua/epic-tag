@@ -19,7 +19,7 @@
     "@testing-library/react": "^16.2.0",
     "@types/bun": "^1.2.2",
     "@types/jsdom": "^21.1.7",
-    "epic-jsx": "^0.9.16",
+    "epic-jsx": "^0.10.1",
     "happy-dom": "^17.0.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
