@@ -1,5 +1,5 @@
+import type React from 'epic-jsx'
 import { create } from 'logua'
-import type React from 'react'
 import { toInline } from './style'
 import type { HtmlTag, States, Style, Styles, Tag } from './types'
 
@@ -53,7 +53,11 @@ export function extendStates<P extends string>(initial?: States<P>, additional?:
   return newStates
 }
 
-export function handleStateIn(ref: { current: HTMLElement }, state: Styles | { [key: string]: Styles }, props: React.ComponentProps<any>) {
+export function handleStateIn(
+  ref: { tag: { native: HTMLElement } },
+  state: Styles | { [key: string]: Styles },
+  props: React.ComponentProps<any>,
+) {
   let specificState = state as Styles
   if (typeof state === 'object') {
     let found = false
@@ -72,24 +76,25 @@ export function handleStateIn(ref: { current: HTMLElement }, state: Styles | { [
     }
   }
 
-  return () => {
-    if (!ref.current) {
+  return (event: any) => {
+    event.preventDefault() // Ensures that focus will not override press when "pressed".
+    if (!ref.tag.native) {
       return toInline(specificState)
     }
 
-    Object.assign(ref.current.style, toInline(specificState))
+    Object.assign(ref.tag.native.style, toInline(specificState))
   }
 }
 
-export function handleStateOut(ref: { current: HTMLElement }, currentStyles: Style[]) {
+export function handleStateOut(ref: { tag: { native: HTMLElement } }, currentStyles: Style[]) {
   return () => {
-    if (!ref.current) {
+    if (!ref.tag.native) {
       return toInline()
     }
 
     // TODO styles from other state styles should be kept.
     // Remove all styles and reset to initial styles (could be memoized).
-    ref.current.removeAttribute('style')
-    Object.assign(ref.current.style, toInline(currentStyles))
+    ref.tag.native.removeAttribute('style')
+    Object.assign(ref.tag.native.style, toInline(currentStyles))
   }
 }

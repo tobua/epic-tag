@@ -26,25 +26,24 @@ export const tag = <T extends HtmlTag, P extends string>(Tag: T | TagType<T, P>,
 
   const TagComponent = Tag as TagType<T, P>
 
-  function StyleTag(this: Component, props: TagProps<T, P>) {
-    const ref = { current: undefined } as unknown as { current: HTMLElement }
+  function StyleTag(this: Component<undefined, 'tag'>, props: TagProps<T, P>) {
     const currentStyles = (styles ? (Array.isArray(styles) ? [...styles] : styles) : []) as Style[]
     // TODO useRef as value to keep track of styles.
 
     if (typeof states === 'object' && states.hover) {
-      props.onMouseEnter = handleStateIn(ref, states.hover, props)
-      props.onMouseLeave = handleStateOut(ref, currentStyles)
+      props.onMouseEnter = handleStateIn(this.ref, states.hover, props)
+      props.onMouseLeave = handleStateOut(this.ref, currentStyles)
     }
 
     if (typeof states === 'object' && states.focus) {
-      // TODO also consider, onFocusIn, onFocus out folder children coming in and out of focus.
-      props.onFocus = handleStateIn(ref, states.focus, props)
-      props.onBlur = handleStateOut(ref, currentStyles)
+      // TODO also consider, onFocusIn, onFocusOut for children coming in and out of focus.
+      props.onFocus = handleStateIn(this.ref, states.focus, props)
+      props.onBlur = handleStateOut(this.ref, currentStyles)
     }
 
     if (typeof states === 'object' && states.press) {
-      props.onMouseDown = handleStateIn(ref, states.press, props)
-      props.onMouseUp = handleStateOut(ref, currentStyles)
+      props.onMouseDown = handleStateIn(this.ref, states.press, props)
+      props.onMouseUp = handleStateOut(this.ref, currentStyles)
     }
 
     if (typeof states === 'object') {
@@ -69,11 +68,10 @@ export const tag = <T extends HtmlTag, P extends string>(Tag: T | TagType<T, P>,
     }
 
     this.once(() => {
-      ref.current = this.refs[0] as HTMLElement
-
+      // All "id"s assigned to tags are tracked on the exported refs object.
       if (props.id) {
         if (!Object.hasOwn(refs, props.id)) {
-          refs[props.id] = ref.current
+          refs[props.id] = this.ref.tag.native
         } else if (process.env.NODE_ENV !== 'production') {
           log(`A ref with id ${props.id} has already been assigned, make sure to use unique ids.`, 'warning')
         }
@@ -82,7 +80,7 @@ export const tag = <T extends HtmlTag, P extends string>(Tag: T | TagType<T, P>,
 
     const objectStyles = Object.assign(toInline(currentStyles) ?? {}, props.style)
 
-    return <TagComponent {...props} style={objectStyles} />
+    return <TagComponent ref="tag" {...props} style={objectStyles} />
   }
 
   // Pass inputs on for later extension of this component.

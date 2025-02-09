@@ -9,7 +9,7 @@ const MyButton = tag('button', 'color-blue p-sm button', {
   focus: 'color-green',
   small: 'fontSize-[10px]',
 })
-const ExtendedButton = tag(MyButton, 'bg-yellow', { hover: 'bg-purple' })
+const ExtendedButton = tag(MyButton, 'bg-yellow', { press: 'bg-purple', hover: 'bg-magenta', focus: 'bg-cyan' })
 const MyInput = tag('input', 'bg-blue p-sm outline border', { hover: 'bg-red', focus: 'bg-green' })
 const Image = tag('img', 'alignSelf-center width-[10vw] height-[10vw]')
 
