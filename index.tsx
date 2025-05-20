@@ -1,5 +1,5 @@
 import type { Component } from 'epic-jsx'
-import { extendStates, extendStyles, handleStateIn, handleStateOut, log, validTag } from './helper'
+import { extendStates, extendStyles, handleStateIn, handleStateOut, log, removeStateProperties, validTag } from './helper'
 import { toInline } from './style'
 import type { HtmlTag, States, Style, Styles, TagProps, Tag as TagType } from './types'
 
@@ -79,6 +79,10 @@ export const tag = <T extends HtmlTag, P extends string>(Tag: T | TagType<T, P>,
     })
 
     const objectStyles = Object.assign(toInline(currentStyles) ?? {}, props.style)
+
+    if (states) {
+      removeStateProperties(props, states)
+    }
 
     return <TagComponent ref="tag" {...props} style={objectStyles} />
   }

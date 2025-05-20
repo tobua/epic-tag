@@ -67,3 +67,21 @@ test('String styles can be passed as props.', () => {
   expect(button.tagName.toLowerCase()).toBe('button')
   expect(button.style.cssText).toBe('color: red; display: flex;')
 })
+
+test("Props defined on the tag aren't passed through.", () => {
+  const Button = tag('button', 'color-blue', { missing: 'color-green', disabled: 'bg-red', active: 'bold' })
+
+  const root = render(
+    <Button missing={true} disabled={true} active={true} title="Labelled">
+      my-button
+    </Button>,
+  )
+  const button = root.tree.children[0].children[0].getElement() as HTMLParagraphElement
+
+  expect(button.tagName.toLowerCase()).toBe('button')
+  expect(button.style.cssText).toBe('color: green; background: red; font-weight: bold;')
+  expect(button.hasAttribute('missing')).toBe(false)
+  expect(button.hasAttribute('disabled')).toBe(true) // Common props are passed through.
+  expect(button.hasAttribute('active')).toBe(false)
+  expect(button.hasAttribute('title')).toBe(true)
+})

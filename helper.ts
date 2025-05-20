@@ -98,3 +98,31 @@ export function handleStateOut(ref: { tag: { native: HTMLElement } }, currentSty
     Object.assign(ref.tag.native.style, toInline(currentStyles))
   }
 }
+
+// Use possibleStandardNames from epic-jsx?
+// This list only includes attribues currently that sound like they could be used as states.
+const htmlAttributes = new Set([
+  'disabled',
+  'checked',
+  'selected',
+  'readonly',
+  'required',
+  'hidden',
+  'open',
+  'autofocus',
+  'autoplay',
+  'loop',
+  'muted',
+  'controls',
+  'download',
+  'draggable',
+])
+
+export function removeStateProperties(props: Record<string, unknown>, states: Record<string, unknown>) {
+  for (const key in props) {
+    if (key in states && !htmlAttributes.has(key)) {
+      delete props[key]
+    }
+  }
+  return props
+}
