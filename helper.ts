@@ -86,16 +86,39 @@ export function handleStateIn(
   }
 }
 
+function kebabToCamel(str: string): string {
+  return str.replace(/-([a-z])/g, (_, char) => char.toUpperCase())
+}
+
+function cssStyleToObject(style: CSSStyleDeclaration): Record<string, string> {
+  const obj: Record<string, string> = {}
+  for (let i = 0; i < style.length; i++) {
+    const key = style.item(i)
+    if (key) {
+      const camelKey = kebabToCamel(key)
+      obj[camelKey] = style.getPropertyValue(key)
+    }
+  }
+  return obj
+}
+
 export function handleStateOut(ref: { tag: { native: HTMLElement } }, currentStyles: Style[]) {
   return () => {
     if (!ref.tag.native) {
       return toInline()
     }
 
-    // TODO styles from other state styles should be kept.
-    // Remove all styles and reset to initial styles (could be memoized).
+    // Get current inline styles as an object
+    // TODO will preserve too many styles, keep state of plugin styles and remove those.
+    const existingStyles = cssStyleToObject(ref.tag.native.style)
+    const pluginStyles = (toInline(currentStyles) ?? {}) as Record<string, string>
+
+    // Merge, giving priority to pluginStyles
+    const mergedStyles = { ...existingStyles, ...pluginStyles }
+
+    // Remove all styles and reset to merged styles
     ref.tag.native.removeAttribute('style')
-    Object.assign(ref.tag.native.style, toInline(currentStyles))
+    Object.assign(ref.tag.native.style, mergedStyles)
   }
 }
 

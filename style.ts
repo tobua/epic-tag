@@ -2,7 +2,13 @@ import { ei } from 'epic-inline'
 import type React from 'epic-jsx'
 import type { Styles } from './types'
 
-export const mergeStyles = (styles: React.CSSProperties[]) => styles.reduce((result, current) => Object.assign(result, current), {})
+export const mergeStyles = (styles: React.CSSProperties[]) => {
+  const result: React.CSSProperties = {}
+  for (const style of styles) {
+    Object.assign(result, style)
+  }
+  return result
+}
 
 // TODO manually maintained, same as epic-jsx.
 const sizeStyleProperties = [

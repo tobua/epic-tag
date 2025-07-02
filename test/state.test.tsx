@@ -108,3 +108,37 @@ test('Can merge multiple definitions from array styles.', () => {
 
   expect(button.style.cssText).toBe('color: green; display: none; background-color: brown; width: 5px;')
 })
+
+test('Direct style manipulation', () => {
+  const button = document.createElement('button')
+  button.style.color = 'blue'
+  expect(button.style.cssText).toBe('color: blue;')
+
+  button.style.backgroundColor = 'red'
+  expect(button.style.cssText).toBe('color: blue; background-color: red;')
+})
+
+test('Externally managed styles will be kept.', () => {
+  const Button = tag('button', 'color-blue', { hover: 'color-red' })
+
+  const { tree } = render(<Button>my-button</Button>)
+
+  const button = tree.children[0].children[0].getElement() as HTMLParagraphElement
+
+  expect(button.tagName.toLowerCase()).toBe('button')
+  expect(button.style.cssText).toBe('color: blue;')
+
+  button.style.backgroundColor = 'red'
+  button.style.border = 'none'
+  button.style.display = 'flex'
+
+  expect(button.style.cssText).toBe('color: blue; background-color: red; border: none none; display: flex;')
+
+  triggerMouseEvent('enter', button)
+
+  expect(button.style.cssText).toBe('color: red; background-color: red; border: none none; display: flex;')
+
+  triggerMouseEvent('leave', button)
+
+  expect(button.style.cssText).toBe('color: blue; background-color: red; display: flex; border: none none;') // TODO border not preserved
+})
