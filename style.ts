@@ -47,7 +47,7 @@ function convertStylesToPixels(styleObject: CSSStyleDeclaration) {
 
 export const toInline = (styles?: string | number | Styles | Styles[]) => {
   if (!styles) {
-    return undefined
+    return
   }
   if (typeof styles === 'string') {
     const convertedStyles = ei(styles)

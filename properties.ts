@@ -50,16 +50,16 @@ export type Color = keyof typeof Colors
 
 export type Style = [PropertyKey, Value | Hex | ColorName | number | Size]
 
-const hex = (color: Hex) => {
-  return [PropertyKeys.color, color] as Style
+const hex = (input: Hex) => {
+  return [PropertyKeys.color, input] as Style
 }
 
 const color = (colorName: ColorName) => {
   return [PropertyKeys.color, colorName] as Style
 }
 
-const size = (property: PropertyKey) => (size: Size | number) => {
-  return [property, size] as Style
+const size = (property: PropertyKey) => (input: Size | number) => {
+  return [property, input] as Style
 }
 
 // First key will be used as the default value unless specified otherwise.
@@ -135,14 +135,14 @@ export const m = Sizes // Size Values
 export const a = Common // Commonly used Properties / Values
 
 export function transform(styles: (Style | Style[])[]): React.CSSProperties {
-  const objectStyles = {}
+  const objectStyles: React.CSSProperties = {}
 
   for (const style of styles) {
     const [key, value] = style
-    if (typeof key !== 'string') {
-      Object.assign(objectStyles, transform(style as Style[]))
+    if (typeof key === 'string') {
+      objectStyles[key as keyof React.CSSProperties] = value as any
     } else {
-      objectStyles[key] = value
+      Object.assign(objectStyles, transform(style as Style[]))
     }
   }
 

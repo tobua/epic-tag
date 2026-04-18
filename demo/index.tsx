@@ -1,5 +1,6 @@
 /// <reference types="@rsbuild/core/types" />
 import { render } from 'epic-jsx'
+// biome-ignore lint/correctness/noUndeclaredDependencies: Linked locally.
 import { tag } from 'epic-tag'
 import logo from '../logo.svg'
 

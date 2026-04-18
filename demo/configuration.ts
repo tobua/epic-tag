@@ -31,9 +31,6 @@ export const gitignore = 'bundle'
 export const vscode = 'biome'
 export const biome = {
   extends: 'recommended',
-  files: {
-    ignore: ['rsbuild.config.ts'],
-  },
 }
 
 export const typescript = {

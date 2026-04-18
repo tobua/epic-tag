@@ -3,7 +3,7 @@ import { extendStates, extendStyles, handleStateIn, handleStateOut, log, removeS
 import { toInline } from './style'
 import type { HtmlTag, States, Style, Styles, TagProps, Tag as TagType } from './types'
 
-export type { Styles, TagType as Tag }
+export type { Styles, Tag } from './types'
 
 export const refs: Record<string, HTMLElement> = {}
 
@@ -27,7 +27,7 @@ export const tag = <T extends HtmlTag, P extends string>(Tag: T | TagType<T, P>,
   const TagComponent = Tag as TagType<T, P>
 
   function StyleTag(this: Component<undefined, 'tag'>, props: TagProps<T, P>) {
-    const currentStyles = (styles ? (Array.isArray(styles) ? [...styles] : styles) : []) as Style[]
+    const currentStyles = ((styles && (Array.isArray(styles) ? [...styles] : styles)) ?? []) as Style[]
     // TODO useRef as value to keep track of styles.
 
     if (typeof states === 'object' && states.hover) {
